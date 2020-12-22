@@ -1,17 +1,14 @@
 
 <?php
 session_start();
-include('include/config.php');
-if(strlen($_SESSION['alogin'])==0)
-	{	
-header('location:index.php');
-}
-else{
-date_default_timezone_set('Asia/Kolkata');// change according timezone
-$currentTime = date( 'd-m-Y h:i:s A', time () );
+include 'include/config.php';
+if (strlen($_SESSION['alogin']) == 0) {
+    header('location:index.php');
+} else {
+    date_default_timezone_set('Asia/Kolkata'); // change according timezone
+    $currentTime = date('d-m-Y h:i:s A', time());
 
-
-?>
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,12 +34,12 @@ popUpWin = open(URLStr,'popUpWin', 'toolbar=no,location=no,directories=no,status
 </script>
 </head>
 <body>
-<?php include('include/header.php');?>
+<?php include 'include/header.php';?>
 
 	<div class="wrapper">
 		<div class="container">
 			<div class="row">
-<?php include('include/sidebar.php');?>				
+<?php include 'include/sidebar.php';?>
 			<div class="span9">
 					<div class="content">
 
@@ -51,17 +48,16 @@ popUpWin = open(URLStr,'popUpWin', 'toolbar=no,location=no,directories=no,status
 								<h3>Pending Orders</h3>
 							</div>
 							<div class="module-body table">
-	<?php if(isset($_GET['del']))
-{?>
+	<?php if (isset($_GET['del'])) {?>
 									<div class="alert alert-error">
 										<button type="button" class="close" data-dismiss="alert">×</button>
-									<strong>Oh snap!</strong> 	<?php echo htmlentities($_SESSION['delmsg']);?><?php echo htmlentities($_SESSION['delmsg']="");?>
+									<strong>Oh snap!</strong> 	<?php echo htmlentities($_SESSION['delmsg']); ?><?php echo htmlentities($_SESSION['delmsg'] = ""); ?>
 									</div>
-<?php } ?>
+<?php }?>
 
 									<br />
 
-							
+
 								<table cellpadding="0" cellspacing="0" border="0" class="datatable-1 table table-bordered table-striped	 display table-responsive" >
 									<thead>
 										<tr>
@@ -74,48 +70,53 @@ popUpWin = open(URLStr,'popUpWin', 'toolbar=no,location=no,directories=no,status
 											<th>Amount </th>
 											<th>Order Date</th>
 											<th>Action</th>
-											
-										
+
+
 										</tr>
 									</thead>
-								
+
 <tbody>
-<?php 
-$st='Delivered';
-$query=mysqli_query($con,"select users.name as username,users.email as useremail,users.contactno as usercontact,users.shippingAddress as shippingaddress,users.shippingCity as shippingcity,users.shippingState as shippingstate,users.shippingPincode as shippingpincode,products.productName as productname,products.shippingCharge as shippingcharge,orders.quantity as quantity,orders.orderDate as orderdate,products.productPrice as productprice,orders.id as id  from orders join users on  orders.userId=users.id join products on products.id=orders.productId where orders.orderStatus='$st'");
-$cnt=1;
-while($row=mysqli_fetch_array($query))
-{
-?>										
+<?php
+$st = 'Delivered';
+    $updatedBy = $_SESSION['id'];
+    if ($_SESSION['role'] != 'ADMIN') {
+        $query = mysqli_query($con, "select users.name as username,users.email as useremail,users.contactno as usercontact,users.shippingAddress as shippingaddress,users.shippingCity as shippingcity,users.shippingState as shippingstate,users.shippingPincode as shippingpincode,products.productName as productname,products.shippingCharge as shippingcharge,orders.quantity as quantity,orders.orderDate as orderdate,products.productPrice as productprice,orders.id as id  from orders join users on  orders.userId=users.id join products on products.id=orders.productId where orders.orderStatus='$st' AND products.updatedBy =" . $updatedBy);
+    } else {
+        $query = mysqli_query($con, "select users.name as username,users.email as useremail,users.contactno as usercontact,users.shippingAddress as shippingaddress,users.shippingCity as shippingcity,users.shippingState as shippingstate,users.shippingPincode as shippingpincode,products.productName as productname,products.shippingCharge as shippingcharge,orders.quantity as quantity,orders.orderDate as orderdate,products.productPrice as productprice,orders.id as id  from orders join users on  orders.userId=users.id join products on products.id=orders.productId where orders.orderStatus='$st'");
+    }
+
+    $cnt = 1;
+    while ($row = mysqli_fetch_array($query)) {
+        ?>
 										<tr>
-											<td><?php echo htmlentities($cnt);?></td>
-											<td><?php echo htmlentities($row['username']);?></td>
-											<td><?php echo htmlentities($row['useremail']);?>/<?php echo htmlentities($row['usercontact']);?></td>
-										
-											<td><?php echo htmlentities($row['shippingaddress'].",".$row['shippingcity'].",".$row['shippingstate']."-".$row['shippingpincode']);?></td>
-											<td><?php echo htmlentities($row['productname']);?></td>
-											<td><?php echo htmlentities($row['quantity']);?></td>
-											<td><?php echo htmlentities($row['quantity']*$row['productprice']+$row['shippingcharge']);?></td>
-											<td><?php echo htmlentities($row['orderdate']);?></td>
-											<td>    <a href="updateorder.php?oid=<?php echo htmlentities($row['id']);?>" title="Update order" target="_blank"><i class="icon-edit"></i></a>
+											<td><?php echo htmlentities($cnt); ?></td>
+											<td><?php echo htmlentities($row['username']); ?></td>
+											<td><?php echo htmlentities($row['useremail']); ?>/<?php echo htmlentities($row['usercontact']); ?></td>
+
+											<td><?php echo htmlentities($row['shippingaddress'] . "," . $row['shippingcity'] . "," . $row['shippingstate'] . "-" . $row['shippingpincode']); ?></td>
+											<td><?php echo htmlentities($row['productname']); ?></td>
+											<td><?php echo htmlentities($row['quantity']); ?></td>
+											<td><?php echo htmlentities($row['quantity'] * $row['productprice'] + $row['shippingcharge']); ?></td>
+											<td><?php echo htmlentities($row['orderdate']); ?></td>
+											<td>    <a href="updateorder.php?oid=<?php echo htmlentities($row['id']); ?>" title="Update order" target="_blank"><i class="icon-edit"></i></a>
 											</td>
 											</tr>
 
-										<?php $cnt=$cnt+1; } ?>
+										<?php $cnt = $cnt + 1;}?>
 										</tbody>
 								</table>
 							</div>
-						</div>						
+						</div>
 
-						
-						
+
+
 					</div><!--/.content-->
 				</div><!--/.span9-->
 			</div>
 		</div><!--/.container-->
 	</div><!--/.wrapper-->
 
-<?php include('include/footer.php');?>
+<?php include 'include/footer.php';?>
 
 	<script src="scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
 	<script src="scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
@@ -132,4 +133,4 @@ while($row=mysqli_fetch_array($query))
 		} );
 	</script>
 </body>
-<?php } ?>
+<?php }?>

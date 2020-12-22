@@ -1,32 +1,31 @@
 <?php
 session_start();
 error_reporting(0);
-include("include/config.php");
-if(isset($_POST['submit']))
-{
-	$username=$_POST['username'];
-	$password=md5($_POST['password']);
-$ret=mysqli_query($con,"SELECT * FROM admin WHERE username='$username' and password='$password'");
-$num=mysqli_fetch_array($ret);
-if($num>0)
-{
-$extra="change-password.php";//
-$_SESSION['alogin']=$_POST['username'];
-$_SESSION['id']=$num['id'];
-$host=$_SERVER['HTTP_HOST'];
-$uri=rtrim(dirname($_SERVER['PHP_SELF']),'/\\');
-header("location:http://$host$uri/$extra");
-exit();
-}
-else
-{
-$_SESSION['errmsg']="Invalid username or password";
-$extra="index.php";
-$host  = $_SERVER['HTTP_HOST'];
-$uri  = rtrim(dirname($_SERVER['PHP_SELF']),'/\\');
-header("location:http://$host$uri/$extra");
-exit();
-}
+include "include/config.php";
+if (isset($_POST['submit'])) {
+    $username = $_POST['username'];
+	$password = md5($_POST['password']);
+    $ret = mysqli_query($con, "SELECT * FROM admin WHERE username='$username' and password='$password'");
+    $num = mysqli_fetch_array($ret);
+    if ($num > 0) {
+        $extra = "change-password.php"; //
+		$_SESSION['alogin'] = $_POST['username'];
+		$_SESSION['firstname'] = $num['firstname'];
+		$_SESSION['phonenumber'] = $num['phonenumber'];
+        $_SESSION['id'] = $num['id'];
+        $_SESSION['role'] = $num['role'];
+        $host = $_SERVER['HTTP_HOST'];
+        $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+        header("location:http://$host$uri/$extra");
+        exit();
+    } else {
+        $_SESSION['errmsg'] = "Invalid username or password";
+        $extra = "index.php";
+        $host = $_SERVER['HTTP_HOST'];
+        $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+        header("location:http://$host$uri/$extra");
+        exit();
+    }
 }
 ?>
 
@@ -56,17 +55,17 @@ exit();
 			  	</a>
 
 				<div class="nav-collapse collapse navbar-inverse-collapse">
-				
+
 					<ul class="nav pull-right">
 
 						<li><a href="http://localhost/shopping/">
 						Back to Portal
-						
+
 						</a></li>
 
-						
 
-						
+
+
 					</ul>
 				</div><!-- /.nav-collapse -->
 			</div>
@@ -83,7 +82,7 @@ exit();
 						<div class="module-head">
 							<h3>Sign In</h3>
 						</div>
-						<span style="color:red;" ><?php echo htmlentities($_SESSION['errmsg']); ?><?php echo htmlentities($_SESSION['errmsg']="");?></span>
+						<span style="color:red;" ><?php echo htmlentities($_SESSION['errmsg']); ?><?php echo htmlentities($_SESSION['errmsg'] = ""); ?></span>
 						<div class="module-body">
 							<div class="control-group">
 								<div class="controls row-fluid">
@@ -100,7 +99,7 @@ exit();
 							<div class="control-group">
 								<div class="controls clearfix">
 									<button type="submit" class="btn btn-primary pull-right" name="submit">Login</button>
-									
+
 								</div>
 							</div>
 						</div>
@@ -112,7 +111,7 @@ exit();
 
 	<div class="footer">
 		<div class="container">
-			 
+
 
 			<b class="copyright">&copy; 2017 Shopping Portal </b> All rights reserved.
 		</div>

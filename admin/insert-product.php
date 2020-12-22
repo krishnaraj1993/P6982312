@@ -22,6 +22,7 @@ if(isset($_POST['submit']))
 	$productimage1=$_FILES["productimage1"]["name"];
 	$productimage2=$_FILES["productimage2"]["name"];
 	$productimage3=$_FILES["productimage3"]["name"];
+	$updatedBy = $_SESSION['id'];
 //for getting product id
 $query=mysqli_query($con,"select max(id) as pid from products");
 	$result=mysqli_fetch_array($query);
@@ -34,7 +35,7 @@ if(!is_dir($dir)){
 	move_uploaded_file($_FILES["productimage1"]["tmp_name"],"productimages/$productid/".$_FILES["productimage1"]["name"]);
 	move_uploaded_file($_FILES["productimage2"]["tmp_name"],"productimages/$productid/".$_FILES["productimage2"]["name"]);
 	move_uploaded_file($_FILES["productimage3"]["tmp_name"],"productimages/$productid/".$_FILES["productimage3"]["name"]);
-$sql=mysqli_query($con,"insert into products(category,subCategory,productName,productCompany,productPrice,productDescription,shippingCharge,productAvailability,productImage1,productImage2,productImage3,productPriceBeforeDiscount) values('$category','$subcat','$productname','$productcompany','$productprice','$productdescription','$productscharge','$productavailability','$productimage1','$productimage2','$productimage3','$productpricebd')");
+$sql=mysqli_query($con,"insert into products(category,subCategory,productName,productCompany,productPrice,productDescription,shippingCharge,productAvailability,productImage1,productImage2,productImage3,productPriceBeforeDiscount,updatedBy) values('$category','$subcat','$productname','$productcompany','$productprice','$productdescription','$productscharge','$productavailability','$productimage1','$productimage2','$productimage3','$productpricebd','$updatedBy')");
 $_SESSION['msg']="Product Inserted Successfully !!";
 
 }
