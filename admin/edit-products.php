@@ -17,28 +17,16 @@ if (strlen($_SESSION['alogin']) == 0) {
         if (sizeof($row) > 0) {
             #==============================================================================
 			$to = $row['email'];
-			$product = $row['productName'];
-            $subject = "Notification : Price Alert";
-
-            $message = "
-	<html>
-	<head>
-	<title>Notification</title>
-	</head>
-	<body>
-	<p>Product ".$product." Current Price is:". $productprice."</p>
-	</body>
-	</html>
-	";
-
-            // Always set content-type when sending HTML email
-            $headers = "MIME-Version: 1.0" . "\r\n";
-            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-
-            // More headers
-            $headers .= 'From: <webmaster@example.com>' . "\r\n";
-
-            mail($to, $subject, $message, $headers);
+			$to = $email;
+			$cURLConnection = curl_init();
+		
+			curl_setopt($cURLConnection, CURLOPT_URL, 'http://127.0.0.1:5000/alert/email?id='.$to);
+			curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
+			
+			$response = curl_exec($cURLConnection);
+			curl_close($cURLConnection);
+			
+			$jsonArrayResponse - json_decode($response);
             #==============================================================================
         }
 

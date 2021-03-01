@@ -123,7 +123,7 @@ $productCompany = $productDetails['productCompany'];
                                 <div class="product-slider">
                                     <div class="owl-carousel home-owl-carousel custom-carousel owl-theme" data-item="4">
                                         <?php
-$ret = mysqli_query($con, "select * from products where category='$category' AND subCategory='$subcat' AND productCompany='$productCompany' AND id!=" . $_GET['id']);
+$ret = mysqli_query($con, "select * from products where category='$category' AND subCategory='$subcat' AND productCompany='$productCompany' AND id!=" . $_GET['id']." ORDER BY products.productPrice ASC");
 while ($row = mysqli_fetch_array($ret)) {
     ?>
 

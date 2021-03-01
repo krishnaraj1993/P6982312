@@ -9,21 +9,12 @@ header('location:index.php');
 else{
 date_default_timezone_set('Asia/Kolkata');// change according timezone
 $currentTime = date( 'd-m-Y h:i:s A', time () );
-
-
-if(isset($_POST['submit']))
-{
-	$category=$_POST['category'];
-	$description=$_POST['description'];
-$sql=mysqli_query($con,"insert into category(categoryName,categoryDescription) values('$category','$description')");
-$_SESSION['msg']="Category Created !!";
-
-}
-
-if(isset($_GET['del']))
+$msg = '';
+if(isset($_GET['action']))
 		  {
-		          mysqli_query($con,"delete from category where id = '".$_GET['id']."'");
-                  $_SESSION['delmsg']="Category deleted !!";
+			  $state = $_GET['action'];
+		          mysqli_query($con,"UPDATE admin SET status=".$state." WHERE id = '".$_GET['id']."'");
+                  $msg = 'User activated';
 		  }
 
 ?>
@@ -32,7 +23,7 @@ if(isset($_GET['del']))
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Admin| Category</title>
+	<title>Admin| Manage Users</title>
 	<link type="text/css" href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<link type="text/css" href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
 	<link type="text/css" href="css/theme.css" rel="stylesheet">
@@ -49,49 +40,51 @@ if(isset($_GET['del']))
 			<div class="span9">
 					<div class="content">
 
-
-
-
 	<div class="module">
 							<div class="module-head">
-								<h3>Manage Reviews</h3>
+								<h3>Manage Admins</h3>
 							</div>
 							<div class="module-body table">
+	<?php if(isset($_GET['del']))
+{?>
+									<div class="alert alert-error">
+										<button type="button" class="close" data-dismiss="alert">×</button>
+									<strong>Oh snap!</strong> 	<?php echo htmlentities($_SESSION['delmsg']);?><?php echo htmlentities($_SESSION['delmsg']="");?>
+									</div>
+<?php } ?>
+
+									<br />
+
+							
 								<table cellpadding="0" cellspacing="0" border="0" class="datatable-1 table table-bordered table-striped	 display" width="100%">
 									<thead>
 										<tr>
 											<th>#</th>
-											<th>Name</th>
-											<th>Summary</th>
-											<th>Review</th>
-											<th>Action</th>
+											<th>Username</th>
+											<th>Firstname </th>
+											<th>Status</th>
+											<th>Action </th>
+										
 										</tr>
 									</thead>
 									<tbody>
 
-<?php $query=mysqli_query($con,"select * from productreviews");
+<?php $query=mysqli_query($con,"select * from admin");
 $cnt=1;
 while($row=mysqli_fetch_array($query))
 {
 ?>									
 										<tr>
 											<td><?php echo htmlentities($cnt);?></td>
-											<td><?php echo htmlentities($row['name']);?></td>
-											<td><?php echo htmlentities($row['summary']);?></td>
-											<td> <?php echo htmlentities($row['review']);?></td>
-											<td>
-											<?php
-											if($row['status']==0){
-											?>
-											<a href="validate.php?id=<?php echo $row['id']?>">Validate</a></td>
-											<?php
-											}else if($row['status']==1){
-												echo 'Pass';
-											}else{
-												echo 'Fake';
-											}
-											?>
-										</tr>
+											<td><?php echo htmlentities($row['username']);?></td>
+											<td><?php echo htmlentities($row['firstname']);?></td>
+											<td> <?php echo htmlentities($row['status']);?></td>
+<td> <?php if ($row['status']==0){  ?> <a  href="manage-admins.php?action=1&id=<?php echo $row['id']; ?>" class="btn btn-success">Active</a> 
+<?php
+}else{  ?>
+<a  href="manage-admins.php?action=0&id=<?php echo $row['id']; ?>" class="btn btn-danger">In active</a> 
+<?php }?>
+</td>
 										<?php $cnt=$cnt+1; } ?>
 										
 								</table>

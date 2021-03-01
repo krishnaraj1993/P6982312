@@ -12,8 +12,8 @@ $currentTime = date( 'd-m-Y h:i:s A', time () );
 
 if(isset($_GET['del']))
 		  {
-		          mysqli_query($con,"delete from products where id = '".$_GET['id']."'");
-                  $_SESSION['delmsg']="Product deleted !!";
+		          mysqli_query($con,"delete from users where id = '".$_GET['id']."'");
+                  $_SESSION['delmsg']="User deleted !!";
 		  }
 
 ?>
@@ -65,6 +65,7 @@ if(isset($_GET['del']))
 											<th>Shippping Address/City/State/Pincode </th>
 											<th>Billing Address/City/State/Pincode </th>
 											<th>Reg. Date </th>
+											<th>Action</th>
 										
 										</tr>
 									</thead>
@@ -83,7 +84,7 @@ while($row=mysqli_fetch_array($query))
 											<td><?php echo htmlentities($row['shippingAddress'].",".$row['shippingCity'].",".$row['shippingState']."-".$row['shippingPincode']);?></td>
 											<td><?php echo htmlentities($row['billingAddress'].",".$row['billingCity'].",".$row['billingState']."-".$row['billingPincode']);?></td>
 											<td><?php echo htmlentities($row['regDate']);?></td>
-											
+											<td><a href="manage-users.php?id=<?php echo $row['id'] ?>&del=delete" onClick="return confirm('Are you sure you want to delete?')"><i class="icon-remove-sign"></i></a></td>
 										<?php $cnt=$cnt+1; } ?>
 										
 								</table>

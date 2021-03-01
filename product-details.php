@@ -477,7 +477,7 @@ $num=mysqli_num_rows($rt);
 																				
 										<div class="product-reviews">
 											<h4 class="title">Customer Reviews</h4>
-<?php $qry=mysqli_query($con,"select * from productreviews where productId='$pid'");
+<?php $qry=mysqli_query($con,"select * from productreviews where productId='$pid' AND status=1");
 while($rvw=mysqli_fetch_array($qry))
 {
 ?>
@@ -498,7 +498,7 @@ while($rvw=mysqli_fetch_array($qry))
 										<form role="form" class="cnt-form" name="review" method="post">
 
 										
-										<div class="product-add-review">
+										<div class="product-add-review" style="display:<?php echo empty($_SESSION['login'])?"none":" " ?>">
 											<h4 class="title">Write your own review</h4>
 											<div class="review-table">
 												<div class="table-responsive">
@@ -548,18 +548,16 @@ while($rvw=mysqli_fetch_array($qry))
 													
 														
 														<div class="row">
-															<div class="col-sm-6">
+															<div class="col-sm-6" style="display:none">
 																<div class="form-group">
-																	<label for="exampleInputName">Your Name <span class="astk">*</span></label>
-																<input type="text" class="form-control txt" id="exampleInputName" placeholder="" name="name" required="required">
+																<input type="hidden" value="<?php echo $_SESSION['login'] ?>" class="form-control txt" id="exampleInputName" placeholder="" name="name">
 																</div><!-- /.form-group -->
 																<div class="form-group">
-																	<label for="exampleInputSummary">Summary <span class="astk">*</span></label>
-																	<input type="text" class="form-control txt" id="exampleInputSummary" placeholder="" name="summary" required="required">
+																	<input type="hidden" value="review" class="form-control txt" id="exampleInputSummary" placeholder="" name="summary">
 																</div><!-- /.form-group -->
 															</div>
 
-															<div class="col-md-6">
+															<div class="col-md-12">
 																<div class="form-group">
 																	<label for="exampleInputReview">Review <span class="astk">*</span></label>
 

@@ -2,35 +2,23 @@
 session_start();
 error_reporting(0);
 include "include/config.php";
-$msg = '';
 if (isset($_POST['submit'])) {
     $username = $_POST['username'];
+    $firstname = $_POST['firstname'];
+    $mnum = $_POST['mnum'];
     $password = md5($_POST['password']);
-    $ret = mysqli_query($con, "SELECT * FROM admin WHERE username='$username' and password='$password'");
-	$num = mysqli_fetch_array($ret);
-	if ($num['status'] == 0 && $num > 0) {
-        $msg = 'Admin not yet approved retailer account';
-        $num = -1;
+    $msg = '';
+    if (mysqli_query($con, "INSERT INTO admin(username, firstname, phonenumber, password, role)
+	VALUES (
+		'" . $username . "',
+		'" . $firstname . "',
+		" . $mnum . ",
+		'" . $password . "',
+		'RETAILER')"
+    )) {
+        $msg = 'User Created Successfully waiting for admin approval';
     } else {
-        if ($num > 0) {
-            $extra = "change-password.php"; //
-            $_SESSION['alogin'] = $_POST['username'];
-            $_SESSION['firstname'] = $num['firstname'];
-            $_SESSION['phonenumber'] = $num['phonenumber'];
-            $_SESSION['id'] = $num['id'];
-            $_SESSION['role'] = $num['role'];
-            $host = $_SERVER['HTTP_HOST'];
-            $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-            header("location:http://$host$uri/$extra");
-            exit();
-        } else {
-            $_SESSION['errmsg'] = "Invalid username or password";
-            $extra = "index.php";
-            $host = $_SERVER['HTTP_HOST'];
-            $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-            header("location:http://$host$uri/$extra");
-            exit();
-        }
+        $msg = 'creation failed' . mysqli_error($con);
     }
 }
 ?>
@@ -86,7 +74,7 @@ if (isset($_POST['submit'])) {
 				<div class="module module-login span4 offset4">
 					<form class="form-vertical" method="post">
 						<div class="module-head">
-							<h3>Sign In</h3>
+							<h3>Vendor Registration</h3>
 							<span style="color: red;"><?php echo $msg; ?></span>
 						</div>
 						<span style="color:red;" ><?php echo htmlentities($_SESSION['errmsg']); ?><?php echo htmlentities($_SESSION['errmsg'] = ""); ?></span>
@@ -96,6 +84,19 @@ if (isset($_POST['submit'])) {
 									<input class="span12" type="text" id="inputEmail" name="username" placeholder="Username">
 								</div>
 							</div>
+
+							<div class="control-group">
+								<div class="controls row-fluid">
+									<input class="span12" type="text" id="inputEmail" name="firstname" placeholder="Firstname">
+								</div>
+							</div>
+
+							<div class="control-group">
+								<div class="controls row-fluid">
+									<input class="span12" type="text" id="inputEmail" name="mnum" placeholder="Mobile Number">
+								</div>
+							</div>
+
 							<div class="control-group">
 								<div class="controls row-fluid">
 						<input class="span12" type="password" id="inputPassword" name="password" placeholder="Password">
@@ -105,8 +106,7 @@ if (isset($_POST['submit'])) {
 						<div class="module-foot">
 							<div class="control-group">
 								<div class="controls clearfix">
-									<button type="submit" class="btn btn-primary pull-right" name="submit">Login</button>
-									<a href="register.php" class="btn btn-warning pull-left">Register</a>
+									<button type="submit" class="btn btn-primary pull-right" name="submit">Register</button>
 								</div>
 							</div>
 						</div>

@@ -1,6 +1,8 @@
 <div class="span3">
     <div class="sidebar">
-
+    <?php
+if ($_SESSION['role'] == 'ADMIN') {
+    ?>
         <ul class="widget widget-menu unstyled">
             <li>
                 <a class="collapsed" data-toggle="collapse" href="#togglePages">
@@ -52,6 +54,9 @@ $num1 = mysqli_num_rows($rt);
                         </a>
                     </li>
                 </ul>
+                <?php
+}
+    ?>
             </li>
             <?php
 if ($_SESSION['role'] == 'ADMIN') {
@@ -60,6 +65,13 @@ if ($_SESSION['role'] == 'ADMIN') {
                 <a href="manage-users.php">
                     <i class="menu-icon icon-group"></i>
                     Manage users
+                </a>
+            </li>
+
+            <li>
+                <a href="manage-admins.php">
+                    <i class="menu-icon icon-group"></i>
+                    Manage Admin
                 </a>
             </li>
             <?php
@@ -75,8 +87,9 @@ if ($_SESSION['role'] == 'ADMIN') {
             <li><a href="category.php"><i class="menu-icon icon-tasks"></i> Create Category </a></li>
             <?php }?>
             <li><a href="subcategory.php"><i class="menu-icon icon-tasks"></i>Sub Category </a></li>
-
+<?php if ($_SESSION['role'] != 'ADMIN') { ?>
             <li><a href="insert-product.php"><i class="menu-icon icon-paste"></i>Insert Product </a></li>
+<?php } ?>           
             <li><a href="manage-products.php"><i class="menu-icon icon-table"></i>Manage Products </a></li>
 
         </ul>
@@ -87,15 +100,16 @@ if ($_SESSION['role'] == 'ADMIN') {
 if ($_SESSION['role'] == 'ADMIN') {
     ?>
             <li><a href="user-logs.php"><i class="menu-icon icon-tasks"></i>User Login Log </a></li>
-            <?php
-}
-?>
+
             <li>
                 <a href="review.php">
                     <i class="menu-icon icon-tasks"></i>
                     Review Validation
                 </a>
             </li>
+            <?php
+}
+?>
             <li>
                 <a href="logout.php">
                     <i class="menu-icon icon-signout"></i>
